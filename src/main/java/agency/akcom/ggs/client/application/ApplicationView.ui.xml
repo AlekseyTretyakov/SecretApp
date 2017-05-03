@@ -1,0 +1,13 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:b="urn:import:org.gwtbootstrap3.client.ui">
+	<ui:style>
+	
+	</ui:style>
+	<g:HTMLPanel>
+		<g:Button ui:field="home">Tab1</g:Button>
+		<g:Button ui:field="some">Tab2</g:Button>
+		<g:SimplePanel ui:field="contentContainer" />
+	</g:HTMLPanel>
+</ui:UiBinder> 
