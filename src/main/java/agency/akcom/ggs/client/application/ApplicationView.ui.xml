@@ -2,12 +2,30 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:b="urn:import:org.gwtbootstrap3.client.ui">
-	<ui:style>
 	
-	</ui:style>
+	<ui:with field="NameTokens" type="agency.akcom.ggs.client.NameTokens"></ui:with>
+	
 	<g:HTMLPanel>
-		<g:Button ui:field="home">Tab1</g:Button>
-		<g:Button ui:field="some">Tab2</g:Button>
-		<g:SimplePanel ui:field="contentContainer" />
+		<b:Navbar styleName="navbar-inverse">
+			<b:Container>
+				<b:NavbarHeader>
+					<b:NavbarBrand>Brand</b:NavbarBrand>
+					<b:NavbarCollapseButton dataTarget="#navbar-collapse" />
+				</b:NavbarHeader>
+				<b:NavbarCollapse b:id="navbar-collapse">
+					<b:NavbarNav>
+						<b:AnchorListItem href="#{NameTokens.getHome}">Home</b:AnchorListItem>
+						<b:AnchorListItem href="#{NameTokens.getChat}">Some</b:AnchorListItem>
+					</b:NavbarNav>
+				</b:NavbarCollapse>
+			</b:Container>
+		</b:Navbar>
+		<b:Container>
+			<b:Row>
+				<b:Column size="MD_12">
+					<g:SimplePanel ui:field="contentContainer" />
+				</b:Column>
+			</b:Row>
+		</b:Container>
 	</g:HTMLPanel>
 </ui:UiBinder> 

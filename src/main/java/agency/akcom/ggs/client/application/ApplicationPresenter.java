@@ -45,7 +45,7 @@ public class ApplicationPresenter extends Presenter<MyView, MyProxy> implements 
     	getView().setUiHandlers(this);
     }
 
-	@Override
+	/*@Override
 	public void onClickHome() {
 		PlaceRequest request = new PlaceRequest.Builder()
                 .nameToken(NameTokens.HOME)
@@ -59,5 +59,5 @@ public class ApplicationPresenter extends Presenter<MyView, MyProxy> implements 
                 .nameToken(NameTokens.SOME)
                 .build();
         placeManager.revealPlace(request);
-	}
+	}*/
 }
