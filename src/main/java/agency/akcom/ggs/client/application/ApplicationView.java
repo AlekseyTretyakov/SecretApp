@@ -16,10 +16,6 @@ public class ApplicationView extends ViewWithUiHandlers<ApplicationUiHandlers> i
 	interface Binder extends UiBinder<Widget, ApplicationView> {
 	}
 	
-	@UiField
-	Button home;
-	@UiField
-	Button some;
 	@UiField 
 	SimplePanel contentContainer;
 	
@@ -27,14 +23,14 @@ public class ApplicationView extends ViewWithUiHandlers<ApplicationUiHandlers> i
 	ApplicationView(Binder uiBinder) {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
-	@UiHandler("home")
+	/*@UiHandler("home")
 	void onClickHome(ClickEvent e){
 		getUiHandlers().onClickHome();
 	}
 	@UiHandler("some")
 	void onClickSome(ClickEvent e){
 		getUiHandlers().onClickSome();
-	}
+	}*/
 	 @Override
 	 public void setInSlot(Object slot, IsWidget content) {
 		 if (slot == ApplicationPresenter.SLOT_MAIN) {

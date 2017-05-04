@@ -22,20 +22,4 @@ public class SomeView extends ViewWithUiHandlers<SomeUiHandlers> implements Some
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 
-	@UiField
-	Button button;
-
-	@UiHandler("button")
-	void onClick(ClickEvent e) {
-		Window.alert("Hello!");
-	}
-
-	public void setText(String text) {
-		button.setText(text);
-	}
-
-	public String getText() {
-		return button.getText();
-	}
-
 }
