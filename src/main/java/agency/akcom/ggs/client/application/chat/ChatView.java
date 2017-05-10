@@ -33,8 +33,8 @@ public class ChatView extends ViewWithUiHandlers<ChatUiHandlers> implements Chat
 	
 	@UiHandler("sendBtn")
 	void onClickSend(ClickEvent event){
-		textBox.setText("");
 		getUiHandlers().onSendMessage(textBox.getText());
+		textBox.setText("");
 	}
 
 	@Override
@@ -43,5 +43,10 @@ public class ChatView extends ViewWithUiHandlers<ChatUiHandlers> implements Chat
 			Label label = new Label(msgs[i]);
 			msgBlock.add(label);
 		}
+	}
+
+	@Override
+	public void showAlert(String alert) {
+		Window.alert(alert);
 	}
 }

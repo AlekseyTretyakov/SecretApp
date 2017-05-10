@@ -5,6 +5,20 @@
          version="2.5"
          xmlns="http://java.sun.com/xml/ns/javaee">
   
+  
+  	<listener>
+    	<listener-class>agency.akcom.ggs.server.guice.GuiceServletConfig</listener-class>
+    </listener>
+
+	<filter>
+	    <filter-name>guiceFilter</filter-name>
+	    <filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+	    <filter-name>guiceFilter</filter-name>
+	    <url-pattern>/*</url-pattern>
+	</filter-mapping>
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>Gae_gwt_stub.html</welcome-file>

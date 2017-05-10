@@ -8,6 +8,11 @@
 	<inherits name='com.google.gwt.user.User' />
 	<!-- GWTP -->
 	<inherits name="com.gwtplatform.mvp.MvpWithEntryPoint" />
+	
+	
+	<inherits name='com.gwtplatform.dispatch.Dispatch' />
+	
+	
 	<extend-configuration-property name="gin.ginjector.modules"
 		value="agency.akcom.ggs.client.ClientModule" />
 		

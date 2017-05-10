@@ -129,6 +129,27 @@
 			<version>${gwtbootstrap.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/com.gwtplatform/gwtp-all -->
+		<dependency>
+		    <groupId>com.gwtplatform</groupId>
+		    <artifactId>gwtp-all</artifactId>
+		    <version>1.6</version>
+		</dependency>
+		
+		
+		<dependency>
+		    <groupId>com.google.inject</groupId>
+		    <artifactId>guice</artifactId>
+		    <version>3.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.google.inject.extensions</groupId>
+		    <artifactId>guice-servlet</artifactId>
+		    <version>3.0</version>
+		</dependency>
+		
+				
 	</dependencies>
 
 	<build>
