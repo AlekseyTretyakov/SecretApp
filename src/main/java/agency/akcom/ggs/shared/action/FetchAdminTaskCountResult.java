@@ -6,12 +6,16 @@ import com.gwtplatform.dispatch.rpc.shared.Result;
 public class FetchAdminTaskCountResult implements Result{
 	private Integer totalTasks;
 	private String message;
+	private int lastIndex;
+	private String time;
 	
     public FetchAdminTaskCountResult() {
     }
 
-    public FetchAdminTaskCountResult(String message) {
+    public FetchAdminTaskCountResult(String message, int lastIndex, String time) {
         this.message = message;
+        this.lastIndex = lastIndex;
+        this.time = time;
     }
 
     public Integer getTotalTasksCount() {
@@ -19,5 +23,11 @@ public class FetchAdminTaskCountResult implements Result{
     }
     public String getMessage() {
     	return this.message;
+    }
+    public int getIndex() {
+    	return this.lastIndex;
+    }
+    public String getTime() {
+    	return this.time;
     }
 }

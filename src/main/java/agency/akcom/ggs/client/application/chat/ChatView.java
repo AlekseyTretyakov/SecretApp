@@ -28,6 +28,8 @@ public class ChatView extends ViewWithUiHandlers<ChatUiHandlers> implements Chat
 	@UiField 
 	Button sendBtn;
 	@UiField
+	Button getMsg;
+	@UiField
 	TextBox textBox;
 	@UiField PanelBody msgBlock;
 	
@@ -36,7 +38,11 @@ public class ChatView extends ViewWithUiHandlers<ChatUiHandlers> implements Chat
 		getUiHandlers().onSendMessage(textBox.getText());
 		textBox.setText("");
 	}
-
+	@UiHandler("getMsg")
+	void onClickGet(ClickEvent event) {
+		getUiHandlers().onGetMessages();
+	}
+	
 	@Override
 	public void showMessages(String[] msgs) {
 		for (int i = 0; i < msgs.length; i++){
