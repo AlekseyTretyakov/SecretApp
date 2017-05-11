@@ -1,11 +1,14 @@
 package agency.akcom.ggs.server.guice;
 
+import java.util.HashMap;
+
 import javax.inject.Inject;
 
 import com.gwtplatform.dispatch.rpc.server.ExecutionContext;
 import com.gwtplatform.dispatch.rpc.server.actionhandler.ActionHandler;
 import com.gwtplatform.dispatch.shared.ActionException;
 
+import agency.akcom.ggs.server.ChatServer;
 import agency.akcom.ggs.shared.action.FetchAdminTaskCountAction;
 import agency.akcom.ggs.shared.action.FetchAdminTaskCountResult;
 
@@ -20,7 +23,11 @@ public class FetchAdminTaskCountHandler
 	@Override
 	public FetchAdminTaskCountResult execute(FetchAdminTaskCountAction action, ExecutionContext arg1)
 			throws ActionException {
-		return new FetchAdminTaskCountResult(action.getMessage());
+		
+		ChatServer server = ChatServer.getInstance();
+		String time = server.addMsg(action.getMessage(), action.getUser());
+		//return new FetchAdminTaskCountResult(action.getMessage());
+		return new FetchAdminTaskCountResult(action.getMessage(), server.getIndex(), time);
 	}
 
 	@Override
