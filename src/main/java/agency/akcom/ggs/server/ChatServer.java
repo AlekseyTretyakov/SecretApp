@@ -10,17 +10,20 @@ public class ChatServer {
 	private static ChatServer instance;
 	private List<Message> list = new ArrayList<>();
 	private int index = 0;
+	private int p = 23; // Добавить их чтение из файла
+	private int g = 5;
+	private List<Struct> openKeys = new ArrayList<>();
 	
 	public class Struct {
-		int index;
-		String time;
+		private double openKey;
+		private String user;
 		
-		public Struct(int index, String time) {
-			this.index = index;
-			this.time = time;
+		public Struct(String user, double openKey) {
+			this.user = user;
+			this.openKey = openKey;
 		}
-		public int getIndex() { return index; }
-		public String getTime() { return time; }
+		public String getUser() { return user; }
+		public double getOpenKey() { return openKey; }
 	}
 	
 	public ChatServer() {}
@@ -35,6 +38,20 @@ public class ChatServer {
 		return instance;
 	}
 	public int getIndex() { return index; }
+	public int getValueP() { return this.p; }
+	public int getValueG() { return this.g; }
+	public void addOpenKeys(String user, double openKey) {
+		this.openKeys.add(new Struct(user, openKey));
+		System.out.println("open key " + openKey + " user " + user);
+	}
+	public double getOpenKeyCompanion(String yourName) {
+		double key = 0;
+		for (Struct s : openKeys){
+			if (s.getUser() != yourName)
+				key = s.getOpenKey();
+		}
+		return key;
+	}
 	
 	public String addMsg(String text, String userName) {
 		String time = new Date().toString();

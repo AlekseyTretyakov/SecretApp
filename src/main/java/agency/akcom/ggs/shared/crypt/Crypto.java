@@ -5,20 +5,23 @@ public class Crypto implements ICrypto{
 	
 	
 	public int[] digitize(String word) {
-		int[] code = new int[text.length()];
+		int[] code = new int[word.length()];
 		for (int i = 0; i < code.length; i++){
-			//char letter = word[i];
-			//code[i] = word[i];
+			char letter = word.charAt(i);
+			code[i] = (int)letter;
 		}
-		return null;
+		return code;
 	}
 	public String redigitize(int[] code) {
-		return null;
+		String word = "";
+		for (int i = 0; i < code.length; i++){
+			word += Character.toString((char)code[i]);
+		}
+		return word;
 	}
 	@Override
-	public String crypt(String text) {
-		// TODO Auto-generated method stub
-		return null;
+	public String crypt(String word, double okey, int skey) {
+		return "";
 	}
 
 	@Override
@@ -26,6 +29,17 @@ public class Crypto implements ICrypto{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+	public static double getSahredSecretKey(double openKey, int secretKey, int p) {
+		return Math.pow(openKey, secretKey) % p;
+	}
+	public static double getOpenKey(int secret, int p, int g) {
+		return Math.pow(g, secret) % p;
+	}
+	/*
+	 * Do a random
+	 */
+	public static int randomSecretKey() {
+		return 6;
+	}
 	
 }

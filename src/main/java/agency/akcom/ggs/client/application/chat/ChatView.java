@@ -40,7 +40,8 @@ public class ChatView extends ViewWithUiHandlers<ChatUiHandlers> implements Chat
 	}
 	@UiHandler("getMsg")
 	void onClickGet(ClickEvent event) {
-		getUiHandlers().onGetMessages();
+		//getUiHandlers().onGetMessages();
+		getUiHandlers().onTest();
 	}
 	
 	@Override
