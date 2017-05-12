@@ -11,9 +11,9 @@ public class ClientModule extends AbstractPresenterModule {
     protected void configure() {
         install(new DefaultModule.Builder()
                 .tokenFormatter(RouteTokenFormatter.class)
-                .defaultPlace(NameTokens.HOME)
-                .errorPlace(NameTokens.HOME)
-                .unauthorizedPlace(NameTokens.HOME)
+                .defaultPlace(NameTokens.LOGIN)
+                .errorPlace(NameTokens.LOGIN)
+                .unauthorizedPlace(NameTokens.LOGIN)
                 .build());
 
         install(new ApplicationModule());
