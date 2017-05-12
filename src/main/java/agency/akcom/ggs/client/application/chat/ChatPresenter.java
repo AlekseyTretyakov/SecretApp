@@ -20,6 +20,11 @@ import agency.akcom.ggs.shared.action.FetchAdminTaskCountAction;
 import agency.akcom.ggs.shared.action.FetchAdminTaskCountResult;
 import agency.akcom.ggs.shared.action.GetNewMessageAction;
 import agency.akcom.ggs.shared.action.GetNewMessageResult;
+import agency.akcom.ggs.shared.action.GetOpenValuesAction;
+import agency.akcom.ggs.shared.action.GetOpenValuesResult;
+import agency.akcom.ggs.shared.action.SendOpenKeyToServerAction;
+import agency.akcom.ggs.shared.action.SendOpenKeyToServerResult;
+import agency.akcom.ggs.shared.crypt.Crypto;
 
 public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter.MyProxy>  
 		implements ChatUiHandlers {
@@ -35,6 +40,10 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 	}
 	private final DispatchAsync dispatcher;	
 	private int lastIndMsg;
+	private double openKey;
+	private int secretKey;
+	private int cryptValP;
+	private int cryptValG;
 	@Inject
 	ChatPresenter(
 			EventBus eventBus,
@@ -44,7 +53,13 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 		this.dispatcher = dispatcher;
 		lastIndMsg = 0;
 		getView().setUiHandlers(this);
-		setRequestTimer();
+		/*
+		 * Search public key at localStorage or create new
+		 */
+		/*
+		 * Request messages from the ChatServer
+		 */
+		//setRequestTimer();
 	}
 	@Override
 	public void onSendMessage(String msg) {
@@ -52,8 +67,7 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 		msgs[0] += " " + msg;
 		FetchAdminTaskCountAction action = new FetchAdminTaskCountAction(msg, "user");
 		
-		
-	    //action.setTaskId(1l);
+		//Do ecnrypt message
 		dispatcher.execute(action, new AsyncCallback<FetchAdminTaskCountResult>(){
 
 			@Override
@@ -111,5 +125,50 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 		      }
 		    };
 	    t.scheduleRepeating(3000);
+	}
+	public void createOpenKey() {
+		dispatcher.execute(new GetOpenValuesAction(), new AsyncCallback<GetOpenValuesResult>(){
+
+			@Override
+			public void onFailure(Throwable arg0) {
+				Window.alert("fail");
+			}
+			/*
+			 * Save keys at localStorage
+			 */
+			@Override
+			public void onSuccess(GetOpenValuesResult result) {
+				secretKey = Crypto.randomSecretKey();
+				cryptValP = result.getValueP();
+				cryptValG = result.getValueG();
+				openKey = Crypto.getOpenKey(secretKey, cryptValP, cryptValG);
+				getView().showAlert("open key: " + openKey);
+				sendPublicKeyToServer("user", openKey);
+			}
+			
+		});
+		
+	}
+	public void sendPublicKeyToServer(String user, double openKey) {
+		dispatcher.execute(new SendOpenKeyToServerAction(user, openKey), new AsyncCallback<SendOpenKeyToServerResult>(){
+
+			@Override
+			public void onFailure(Throwable arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onSuccess(SendOpenKeyToServerResult arg0) {
+				// TODO Auto-generated method stub
+				
+			}});
+	}
+	@Override
+	public void onTest() {
+		createOpenKey();
+	}
+	public void callBack(){
+		getView().showAlert("test");
 	}
 }
