@@ -1,5 +1,7 @@
 package agency.akcom.ggs.client.security;
 
+import com.google.gwt.user.client.Window;
+
 public class CurrentUser {
 	private Boolean loggedIn;
 	private String user;

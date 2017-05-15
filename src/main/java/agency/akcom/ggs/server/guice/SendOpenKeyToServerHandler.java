@@ -13,7 +13,7 @@ public class SendOpenKeyToServerHandler implements ActionHandler<SendOpenKeyToSe
 	@Override
 	public SendOpenKeyToServerResult execute(SendOpenKeyToServerAction action, ExecutionContext arg1)
 			throws ActionException {
-		System.out.println(action.getOpenKey() + " " + action.getUser());
+		System.out.println(action.getOpenKey() + " - " + action.getUser());
 		ChatServer server = ChatServer.getInstance();
 		server.addOpenKeys(action.getUser(), action.getOpenKey());
 		/*
