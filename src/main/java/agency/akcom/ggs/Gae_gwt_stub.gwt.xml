@@ -19,6 +19,7 @@
 		
 	<!-- GWT Bootstrap 3 -->
 	<inherits name="org.gwtbootstrap3.GwtBootstrap3" />
+	<inherits name="com.google.gwt.logging.Logging"/>
 	<!-- Inherit the default GWT style sheet. You can change -->
 	<!-- the theme of your GWT application by uncommenting -->
 	<!-- any one of the following lines. -->

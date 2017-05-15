@@ -18,6 +18,7 @@ import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import agency.akcom.ggs.client.NameTokens;
 import agency.akcom.ggs.client.application.ApplicationPresenter;
 import agency.akcom.ggs.client.security.CurrentUser;
+import agency.akcom.ggs.client.security.UserAccount;
 
 public class LoginPresenter extends Presenter<LoginPresenter.MyView, LoginPresenter.MyProxy>
 		implements LoginUiHandlers {
@@ -57,7 +58,8 @@ public class LoginPresenter extends Presenter<LoginPresenter.MyView, LoginPresen
 		if (validateCredentials(userName, userPass)) {
 			currentUser.setUser(userName);
             currentUser.setLoggedIn(true);
-            Window.alert(currentUser.isLoggedIn() + "");
+            
+            UserAccount.setUser(userName);
             
             PlaceRequest placeRequest = new PlaceRequest.Builder()
                     .nameToken(NameTokens.CHAT)
@@ -66,6 +68,7 @@ public class LoginPresenter extends Presenter<LoginPresenter.MyView, LoginPresen
         }
 	}
 	private boolean validateCredentials(String username, String password) {
-        return username.equals(USERNAME) && password.equals(PASSWORD);
+		return true;
+        //return username.equals(USERNAME) && password.equals(PASSWORD);
     }
 }

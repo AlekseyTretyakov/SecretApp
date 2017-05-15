@@ -2,6 +2,6 @@ eclipse.preferences.version=1
 gwtMavenModuleName=agency.akcom.ggs.Gae_gwt_stub
 gwtMavenModuleShortName=Gae_gwt_stub
 jarsExcludedFromWebInfLib=
-lastWarOutDir=C\:/Pojects/SecretApp/target/Gae_gwt_stub-1.0-SNAPSHOT
+lastWarOutDir=A\:/Java Eclipse/SecretApp/target/Gae_gwt_stub-1.0-SNAPSHOT
 warSrcDir=src/main/webapp
 warSrcDirIsOutput=false

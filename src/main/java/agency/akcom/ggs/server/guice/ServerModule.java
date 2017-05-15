@@ -2,10 +2,14 @@ package agency.akcom.ggs.server.guice;
 
 import com.gwtplatform.dispatch.rpc.server.guice.HandlerModule;
 
+import agency.akcom.ggs.shared.action.AddUserAction;
+import agency.akcom.ggs.shared.action.CheckUserExistAction;
 import agency.akcom.ggs.shared.action.FetchAdminTaskCountAction;
+import agency.akcom.ggs.shared.action.GetAliasKeyAction;
 import agency.akcom.ggs.shared.action.GetNewMessageAction;
 import agency.akcom.ggs.shared.action.GetOpenValuesAction;
 import agency.akcom.ggs.shared.action.SendOpenKeyToServerAction;
+import agency.akcom.ggs.shared.action.SukaAction;
 
 public class ServerModule extends HandlerModule{
 
@@ -14,6 +18,10 @@ public class ServerModule extends HandlerModule{
 		bindHandler(FetchAdminTaskCountAction.class, FetchAdminTaskCountHandler.class);
 		bindHandler(GetNewMessageAction.class, GetNewMessageHandler.class);
 		bindHandler(GetOpenValuesAction.class, GetOpenValuesHandler.class);
+		bindHandler(SukaAction.class, SukaHandler.class);
 		bindHandler(SendOpenKeyToServerAction.class, SendOpenKeyToServerHandler.class);
+		bindHandler(GetAliasKeyAction.class, GetAliasKeyHandler.class);
+		bindHandler(CheckUserExistAction.class, CheckUserExistHandler.class);
+		bindHandler(AddUserAction.class, AddUserHandler.class);
 	}
 }

@@ -1,5 +1,8 @@
 package agency.akcom.ggs.client.application.chat;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.inject.Inject;
 
 import com.google.gwt.user.client.Timer;
@@ -17,14 +20,19 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 
 import agency.akcom.ggs.client.NameTokens;
 import agency.akcom.ggs.client.application.ApplicationPresenter;
+import agency.akcom.ggs.client.security.UserAccount;
 import agency.akcom.ggs.shared.action.FetchAdminTaskCountAction;
 import agency.akcom.ggs.shared.action.FetchAdminTaskCountResult;
+import agency.akcom.ggs.shared.action.GetAliasKeyAction;
+import agency.akcom.ggs.shared.action.GetAliasKeyResult;
 import agency.akcom.ggs.shared.action.GetNewMessageAction;
 import agency.akcom.ggs.shared.action.GetNewMessageResult;
 import agency.akcom.ggs.shared.action.GetOpenValuesAction;
 import agency.akcom.ggs.shared.action.GetOpenValuesResult;
 import agency.akcom.ggs.shared.action.SendOpenKeyToServerAction;
 import agency.akcom.ggs.shared.action.SendOpenKeyToServerResult;
+import agency.akcom.ggs.shared.action.SukaAction;
+import agency.akcom.ggs.shared.action.SukaResult;
 import agency.akcom.ggs.shared.crypt.Crypto;
 
 public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter.MyProxy>  
@@ -36,15 +44,20 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 	}
 	@ProxyStandard
 	@NameToken(NameTokens.CHAT)
+	@NoGatekeeper
 	interface MyProxy extends ProxyPlace<ChatPresenter> {
 		
 	}
 	private final DispatchAsync dispatcher;	
 	private int lastIndMsg;
 	private double openKey;
-	private int secretKey;
+	private double alienOpenKey;
+	private int secretValue;
 	private int cryptValP;
 	private int cryptValG;
+	private double secretKey;
+	Logger logger = Logger.getLogger("TestLogger2");
+	
 	@Inject
 	ChatPresenter(
 			EventBus eventBus,
@@ -54,6 +67,8 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 		this.dispatcher = dispatcher;
 		lastIndMsg = 0;
 		getView().setUiHandlers(this);
+
+		createOpenKey();
 		/*
 		 * Search public key at localStorage or create new
 		 */
@@ -128,7 +143,10 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 	    t.scheduleRepeating(3000);
 	}
 	public void createOpenKey() {
-		dispatcher.execute(new GetOpenValuesAction(), new AsyncCallback<GetOpenValuesResult>(){
+		
+		GetOpenValuesAction action = new GetOpenValuesAction();
+		//Window.alert(action.getServiceName() + " " + action.isSecured());
+		dispatcher.execute(action, new AsyncCallback<GetOpenValuesResult>(){
 
 			@Override
 			public void onFailure(Throwable arg0) {
@@ -139,12 +157,14 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 			 */
 			@Override
 			public void onSuccess(GetOpenValuesResult result) {
-				secretKey = Crypto.randomSecretKey();
+				secretValue = Crypto.randomSecretKey();
 				cryptValP = result.getValueP();
 				cryptValG = result.getValueG();
-				openKey = Crypto.getOpenKey(secretKey, cryptValP, cryptValG);
-				getView().showAlert("open key: " + openKey);
-				sendPublicKeyToServer("user", openKey);
+				openKey = Crypto.getOpenKey(secretValue, cryptValP, cryptValG);
+				logger.log(Level.INFO, "open key: " + openKey);
+				logger.log(Level.INFO, "user: " + UserAccount.getUser());
+				//getView().showAlert("open key: " + openKey);
+				sendPublicKeyToServer(UserAccount.getUser(), openKey);
 			}
 			
 		});
@@ -161,13 +181,32 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 
 			@Override
 			public void onSuccess(SendOpenKeyToServerResult arg0) {
-				// TODO Auto-generated method stub
+				//Window.alert("Key saved successfully");
 				
+			}});
+	}
+	public void createSharedSecretKey() {
+		GetAliasKeyAction action = new GetAliasKeyAction(UserAccount.getUser());
+		
+		dispatcher.execute(action, new AsyncCallback<GetAliasKeyResult>(){
+
+			@Override
+			public void onFailure(Throwable arg0) {
+				Window.alert("error");
+			}
+
+			@Override
+			public void onSuccess(GetAliasKeyResult result) {
+				// TODO Auto-generated method stub
+				alienOpenKey = result.getKey();
+				secretKey = Crypto.getSahredSecretKey(alienOpenKey, secretValue, cryptValP);
+				Window.alert(secretKey + "");
 			}});
 	}
 	@Override
 	public void onTest() {
-		createOpenKey();
+		Window.alert(UserAccount.getUser() + "");
+		createSharedSecretKey();
 	}
 	public void callBack(){
 		getView().showAlert("test");
