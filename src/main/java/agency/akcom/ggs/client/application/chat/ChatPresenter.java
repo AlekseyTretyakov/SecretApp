@@ -29,6 +29,8 @@ import agency.akcom.ggs.shared.action.GetNewMessageAction;
 import agency.akcom.ggs.shared.action.GetNewMessageResult;
 import agency.akcom.ggs.shared.action.GetOpenValuesAction;
 import agency.akcom.ggs.shared.action.GetOpenValuesResult;
+import agency.akcom.ggs.shared.action.GetUserListAtRoomAction;
+import agency.akcom.ggs.shared.action.GetUserListAtRoomResult;
 import agency.akcom.ggs.shared.action.SendOpenKeyToServerAction;
 import agency.akcom.ggs.shared.action.SendOpenKeyToServerResult;
 import agency.akcom.ggs.shared.action.SukaAction;
@@ -41,6 +43,7 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 	interface MyView extends View, HasUiHandlers<ChatUiHandlers> {
 		void showMessages(String[] msgs);
 		void showAlert(String alert);
+		void setEnabledButton();
 	}
 	@ProxyStandard
 	@NameToken(NameTokens.CHAT)
@@ -203,10 +206,27 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 				Window.alert(secretKey + "");
 			}});
 	}
+	public void getCountUserInRoom() {
+		int room = 0;
+		dispatcher.execute(new GetUserListAtRoomAction(room), new AsyncCallback<GetUserListAtRoomResult>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				Window.alert(caught + "");
+			}
+
+			@Override
+			public void onSuccess(GetUserListAtRoomResult result) {
+				// TODO Auto-generated method stub
+				Window.alert(result.getUsers().size() + "");
+				Window.alert("good");
+			}});
+	}
 	@Override
 	public void onTest() {
-		Window.alert(UserAccount.getUser() + "");
-		createSharedSecretKey();
+		//Window.alert(UserAccount.getUser() + "");
+		getCountUserInRoom();
 	}
 	public void callBack(){
 		getView().showAlert("test");

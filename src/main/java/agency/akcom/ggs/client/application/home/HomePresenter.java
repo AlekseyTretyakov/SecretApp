@@ -19,6 +19,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
     @ProxyStandard
     @NameToken(NameTokens.HOME)
+    @NoGatekeeper
     interface MyProxy extends ProxyPlace<HomePresenter> {
     }
 

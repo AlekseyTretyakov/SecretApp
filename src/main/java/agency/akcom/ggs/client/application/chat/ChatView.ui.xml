@@ -15,10 +15,18 @@
 		  <b:PanelFooter>
 		  	<b:Row>
 		  		<b:Column size="MD_11">
-			  		<b:TextBox ui:field="textBox" placeholder="Message text" autoComplete="false"/>
+		  			<!-- <b:TextBox ui:field="textBox" placeholder="Message text" autoComplete="false"/> -->
+		  			<b:Row>
+		  				<b:Column size="MD_11">
+		  					<b:TextBox ui:field="textBox" placeholder="Message text" autoComplete="false"/>
+		  				</b:Column>
+		  				<b:Column size="MD_11">
+		  					<b.html:Span ui:field="userList"></b.html:Span>
+		  				</b:Column>
+		  			</b:Row>
 			  	</b:Column>
 			  	<b:Column size="MD_1">
-			    	<b:Button ui:field="sendBtn" type="PRIMARY">Send</b:Button>
+			    	<b:Button ui:field="sendBtn" type="PRIMARY" enabled="false">Send</b:Button>
 			    	<b:Button ui:field="getMsg" type="WARNING">Get</b:Button>
 		    	</b:Column>
 		    </b:Row>
