@@ -56,4 +56,9 @@ public class ChatView extends ViewWithUiHandlers<ChatUiHandlers> implements Chat
 	public void showAlert(String alert) {
 		Window.alert(alert);
 	}
+	@Override
+	public void setEnabledButton() {
+		// TODO Auto-generated method stub
+		
+	}
 }
