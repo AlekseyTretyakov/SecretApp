@@ -17,13 +17,8 @@ public class GetUserListAtRoomHandler
 	public GetUserListAtRoomResult execute(GetUserListAtRoomAction action, ExecutionContext arg1) throws ActionException {
 		ChatServer server = ChatServer.getInstance();
 		
-		/*
-		 * Для теста добавлю 2 пользователя в комнату 
-		 */
-		server.addUserInRoom(0, "Valera");
-		server.addUserInRoom(0, "Tolyan");
-		
 		List<String> users = server.getUsersInRoom(action.getRoom());
+		
 		return new GetUserListAtRoomResult(users);
 	}
 

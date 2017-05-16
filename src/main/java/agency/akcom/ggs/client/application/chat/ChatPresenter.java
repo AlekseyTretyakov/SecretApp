@@ -1,10 +1,14 @@
 package agency.akcom.ggs.client.application.chat;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -16,7 +20,9 @@ import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.NoGatekeeper;
 import com.gwtplatform.mvp.client.annotations.ProxyStandard;
+import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
+import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 
 import agency.akcom.ggs.client.NameTokens;
 import agency.akcom.ggs.client.application.ApplicationPresenter;
@@ -59,19 +65,29 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 	private int cryptValP;
 	private int cryptValG;
 	private double secretKey;
+	private Timer timer;
+	private int room;
+	private int counter = 0;
+	private PlaceManager placeManager;
 	Logger logger = Logger.getLogger("TestLogger2");
 	
 	@Inject
 	ChatPresenter(
 			EventBus eventBus,
 			MyView view,
-			MyProxy proxy, final DispatchAsync dispatcher) {
+			MyProxy proxy, final DispatchAsync dispatcher,
+			PlaceManager placeManager) {
 		super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN);
 		this.dispatcher = dispatcher;
 		lastIndMsg = 0;
+		this.placeManager = placeManager;
 		getView().setUiHandlers(this);
 
+		room = Integer.parseInt(placeManager.getCurrentPlaceRequest().getParameter("ch", ""));
+		logger.log(Level.INFO, "channel " +  room + "; user " + UserAccount.getUser());
+		
 		createOpenKey();
+		//setRequestTimer();
 		/*
 		 * Search public key at localStorage or create new
 		 */
@@ -135,16 +151,7 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 			}
 		});
 	}
-	public void setRequestTimer() {
-		final int mycount = 0;
-		Timer t = new Timer() {
-		      @Override
-		      public void run() { 
-		        onGetMessages();
-		      }
-		    };
-	    t.scheduleRepeating(3000);
-	}
+	
 	public void createOpenKey() {
 		
 		GetOpenValuesAction action = new GetOpenValuesAction();
@@ -160,6 +167,7 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 			 */
 			@Override
 			public void onSuccess(GetOpenValuesResult result) {
+				
 				secretValue = Crypto.randomSecretKey();
 				cryptValP = result.getValueP();
 				cryptValG = result.getValueG();
@@ -184,8 +192,8 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 
 			@Override
 			public void onSuccess(SendOpenKeyToServerResult arg0) {
-				//Window.alert("Key saved successfully");
 				
+				getCountUserInRoom();
 			}});
 	}
 	public void createSharedSecretKey() {
@@ -203,11 +211,13 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 				// TODO Auto-generated method stub
 				alienOpenKey = result.getKey();
 				secretKey = Crypto.getSahredSecretKey(alienOpenKey, secretValue, cryptValP);
-				Window.alert(secretKey + "");
+				logger.log(Level.INFO, "secret key: " + secretKey);
+				getView().setEnabledButton();
+				//Window.alert(secretKey + "");
 			}});
 	}
 	public void getCountUserInRoom() {
-		int room = 0;
+		//final int room = 0;
 		dispatcher.execute(new GetUserListAtRoomAction(room), new AsyncCallback<GetUserListAtRoomResult>(){
 
 			@Override
@@ -218,9 +228,16 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 
 			@Override
 			public void onSuccess(GetUserListAtRoomResult result) {
-				// TODO Auto-generated method stub
-				Window.alert(result.getUsers().size() + "");
-				Window.alert("good");
+				logger.log(Level.INFO, "users in room " + room + " " + result.getUsers().size());
+				for (String s : result.getUsers()) {
+					logger.log(Level.INFO, "name " + s);
+				}
+				if (result.getUsers().size() == 2){
+					createSharedSecretKey();
+				} else {
+					getCountUserInRoom();
+				}
+				 
 			}});
 	}
 	@Override
@@ -230,5 +247,15 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 	}
 	public void callBack(){
 		getView().showAlert("test");
+	}
+	public void setRequestTimer() {
+		
+		timer = new Timer() {
+		      @Override
+		      public void run() { 
+		    	  getCountUserInRoom();
+		      }
+		    };
+	    timer.scheduleRepeating(3000);
 	}
 }

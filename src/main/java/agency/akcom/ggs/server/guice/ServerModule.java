@@ -3,6 +3,7 @@ package agency.akcom.ggs.server.guice;
 import com.gwtplatform.dispatch.rpc.server.guice.HandlerModule;
 
 import agency.akcom.ggs.shared.action.AddUserAction;
+import agency.akcom.ggs.shared.action.AddUserAtRoomAction;
 import agency.akcom.ggs.shared.action.CheckUserExistAction;
 import agency.akcom.ggs.shared.action.FetchAdminTaskCountAction;
 import agency.akcom.ggs.shared.action.GetAliasKeyAction;
@@ -25,5 +26,6 @@ public class ServerModule extends HandlerModule{
 		bindHandler(GetAliasKeyAction.class, GetAliasKeyHandler.class);
 		bindHandler(CheckUserExistAction.class, CheckUserExistHandler.class);
 		bindHandler(AddUserAction.class, AddUserHandler.class);
+		bindHandler(AddUserAtRoomAction.class, AddUserAtRoomHandler.class);
 	}
 }
