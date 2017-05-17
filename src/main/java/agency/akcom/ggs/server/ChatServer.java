@@ -63,9 +63,10 @@ public class ChatServer {
 		double key = 0;
 		for (SKeyUser s : openKeys){
 			//System.out.println(s.getUser());
-			if (s.getUser() != yourName)
+			if (s.getUser().equals(yourName) == false)
 				key = s.getOpenKey();
 		}
+		System.out.println(key);
 		return key;
 	}
 	
