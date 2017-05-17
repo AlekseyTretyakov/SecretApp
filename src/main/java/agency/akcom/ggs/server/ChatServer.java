@@ -69,7 +69,11 @@ public class ChatServer {
 		return key;
 	}
 	
-	
+	public int getCountUsersInRoom(int room) {
+		if (rooms.isEmpty())
+			return 0;
+		return rooms.get(room).size();
+	}
 	public List<String> getUsersInRoom(int room) {
 		List<String> usr = rooms.get(room);
 		return usr;

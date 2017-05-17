@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.web.bindery.event.shared.EventBus;
@@ -25,10 +26,13 @@ import agency.akcom.ggs.client.application.ApplicationPresenter;
 import agency.akcom.ggs.client.security.UserAccount;
 import agency.akcom.ggs.shared.action.AddUserAtRoomAction;
 import agency.akcom.ggs.shared.action.AddUserAtRoomResult;
+import agency.akcom.ggs.shared.action.CheckCountUsersAction;
+import agency.akcom.ggs.shared.action.CheckCountUsersResult;
 
 public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter.MyProxy>
 		implements HomeUiHandlers {
     interface MyView extends View, HasUiHandlers<HomeUiHandlers> {
+    	void setButtonEnabled(int num, boolean flag);
     }
 
     @ProxyStandard
@@ -52,8 +56,35 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
         this.placeManager = placeManager;
         this.dispatcher = dispathcer;
         getView().setUiHandlers(this);
+        
+        Timer t = new Timer(){
+
+			@Override
+			public void run() {
+				checkFreeChannels();
+			}
+        	
+        };
+        t.scheduleRepeating(2000);
     }
 
+    public void checkFreeChannels() {
+    	dispatcher.execute(new CheckCountUsersAction(0), new AsyncCallback<CheckCountUsersResult>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert(caught + "");
+			}
+
+			@Override
+			public void onSuccess(CheckCountUsersResult result) {
+				if (result.getUsersCount() < 2)
+					getView().setButtonEnabled(0, true);
+				else getView().setButtonEnabled(0, false);
+				//Window.alert("food" + result.getUsersCount());
+			}});
+    }
+    
 	@Override
 	public void onChooseChanel1(final int ch) {
 		
