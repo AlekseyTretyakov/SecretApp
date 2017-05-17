@@ -58,7 +58,6 @@ public class ChatView extends ViewWithUiHandlers<ChatUiHandlers> implements Chat
 	}
 	@Override
 	public void setEnabledButton() {
-		// TODO Auto-generated method stub
-		
+		sendBtn.setEnabled(true);
 	}
 }

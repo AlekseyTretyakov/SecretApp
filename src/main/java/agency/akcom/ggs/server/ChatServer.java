@@ -62,7 +62,7 @@ public class ChatServer {
 	public double getOpenKeyCompanion(String yourName) {
 		double key = 0;
 		for (SKeyUser s : openKeys){
-			System.out.println(s.getUser());
+			//System.out.println(s.getUser());
 			if (s.getUser() != yourName)
 				key = s.getOpenKey();
 		}

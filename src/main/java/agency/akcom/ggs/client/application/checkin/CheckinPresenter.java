@@ -107,7 +107,7 @@ public class CheckinPresenter extends Presenter<CheckinPresenter.MyView, Checkin
 	public void goToChatPage() {
 		
 		PlaceRequest placeRequest = new PlaceRequest.Builder()
-                .nameToken(NameTokens.CHAT)
+                .nameToken(NameTokens.HOME)
                 .build();
         placeManager.revealPlace(placeRequest);
 	}

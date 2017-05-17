@@ -4,44 +4,19 @@
 	xmlns:b="urn:import:org.gwtbootstrap3.client.ui"
 	xmlns:b.html="urn:import:org.gwtbootstrap3.client.ui.html">
 
-	<g:HTMLPanel>
-		<b:PageHeader>Hello!</b:PageHeader>
-		<b:Form>
-			<b:FieldSet>
-				<b:Legend>Sample form</b:Legend>
-			    <b:FormGroup>
-			      <b:FormLabel for="formEmail">Email</b:FormLabel>
-			      <b:FormControlStatic b:id="formEmail">email@example.example</b:FormControlStatic>
-			    </b:FormGroup>
-			
-			    <b:FormGroup>
-			      <b:FormLabel for="formPassword">Password</b:FormLabel>
-			      <b:Input type="PASSWORD" b:id="formPassword"/>
-			    </b:FormGroup>
-			
-			    <b:FormGroup>
-			      <b:FormLabel for="formName">Name</b:FormLabel>
-			      <b:TextBox placeholder="blabla" b:id="formName"/>
-			    </b:FormGroup>
-			
-			    <b:FormGroup validationState="WARNING">
-			      <b:FormLabel for="formWarning">Input with warning</b:FormLabel>
-			      <b:TextBox b:id="formWarning"/>
-			      <b:HelpBlock text=""/>
-			    </b:FormGroup>
-			
-			    <b:FormGroup validationState="ERROR">
-			      <b:FormLabel for="formError">Input with error</b:FormLabel>
-			      <b:TextBox b:id="formError"/>
-			    </b:FormGroup>
-			
-			    <b:FormGroup validationState="SUCCESS">
-			      <b:FormLabel for="formSuccess">Input with success</b:FormLabel>
-			      <b:TextBox b:id="formSuccess"/>
-			    </b:FormGroup>
-			
-			    <b:Button>Send</b:Button>
-		    </b:FieldSet>
-		</b:Form>
-	</g:HTMLPanel>
+	<b:Container>
+		<b:Row>
+			<b:Column size="MD_12">
+				<b:PageHeader>Hello!</b:PageHeader>
+				<b:Row>
+					<b:Column size="MD_3" offset="MD_3">
+						<b.html:Strong>Choose the channel 1</b.html:Strong>
+					</b:Column>
+					<b:Column size="MD_6">
+						<b:Button ui:field="bch1" type="SUCCESS">Accept</b:Button>
+					</b:Column>
+				</b:Row>
+			</b:Column>
+		</b:Row>
+	</b:Container>
 </ui:UiBinder> 
