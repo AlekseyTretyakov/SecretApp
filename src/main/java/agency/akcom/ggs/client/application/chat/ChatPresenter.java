@@ -153,7 +153,6 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 	}
 	
 	public void createOpenKey() {
-		
 		GetOpenValuesAction action = new GetOpenValuesAction();
 		//Window.alert(action.getServiceName() + " " + action.isSecured());
 		dispatcher.execute(action, new AsyncCallback<GetOpenValuesResult>(){
@@ -235,7 +234,16 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 				if (result.getUsers().size() == 2){
 					createSharedSecretKey();
 				} else {
-					getCountUserInRoom();
+					Timer timer = new Timer() {
+
+						@Override
+						public void run() {
+							getCountUserInRoom();
+						}
+						
+					};
+					timer.schedule(2000);
+					//getCountUserInRoom();
 				}
 				 
 			}});
