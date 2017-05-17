@@ -98,11 +98,14 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 	}
 	@Override
 	public void onSendMessage(String msg) {
-		final String[] msgs = {"User"};
+		final String[] msgs = {UserAccount.getUser()};
 		msgs[0] += " " + msg;
-		FetchAdminTaskCountAction action = new FetchAdminTaskCountAction(msg, "user");
 		
-		//Do ecnrypt message
+		String cmsg = Crypto.crypt(msg, secretKey);
+		logger.log(Level.INFO, cmsg);
+		
+		FetchAdminTaskCountAction action = new FetchAdminTaskCountAction(cmsg, UserAccount.getUser());
+		
 		dispatcher.execute(action, new AsyncCallback<FetchAdminTaskCountResult>(){
 
 			@Override
@@ -143,7 +146,9 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 				index = result.getIndex();
 				if (result.isNotEmpty()) {
 					for (int i = 0; i < text.length; i++){
-						msgs[i] = user[i] + " " + text[i] + " " + time[i]; 
+						logger.log(Level.INFO, text[i]);
+						String txt = Crypto.decrypt(text[i], secretKey);
+						msgs[i] = user[i] + " " + txt + " " + time[i]; 
 						lastIndMsg++;
 					}
 					getView().showMessages(msgs);
@@ -196,6 +201,7 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 			}});
 	}
 	public void createSharedSecretKey() {
+		
 		GetAliasKeyAction action = new GetAliasKeyAction(UserAccount.getUser());
 		
 		dispatcher.execute(action, new AsyncCallback<GetAliasKeyResult>(){
@@ -210,8 +216,20 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 				// TODO Auto-generated method stub
 				alienOpenKey = result.getKey();
 				secretKey = Crypto.getSahredSecretKey(alienOpenKey, secretValue, cryptValP);
+				logger.log(Level.INFO, "okey " + openKey + "; sval " + secretValue + "; alienOpenKey " + alienOpenKey);
 				logger.log(Level.INFO, "secret key: " + secretKey);
 				getView().setEnabledButton();
+				
+				Timer timer = new Timer() {
+
+					@Override
+					public void run() {
+						onGetMessages();
+					}
+					
+				};
+				timer.scheduleRepeating(2000);
+				
 				//Window.alert(secretKey + "");
 			}});
 	}
@@ -227,11 +245,12 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 
 			@Override
 			public void onSuccess(GetUserListAtRoomResult result) {
-				logger.log(Level.INFO, "users in room " + room + " " + result.getUsers().size());
+				/*logger.log(Level.INFO, "users in room " + room + " " + result.getUsers().size());
 				for (String s : result.getUsers()) {
 					logger.log(Level.INFO, "name " + s);
-				}
+				}*/
 				if (result.getUsers().size() == 2){
+					logger.log(Level.INFO, "users in room " + room + " " + result.getUsers().size());
 					createSharedSecretKey();
 				} else {
 					Timer timer = new Timer() {
@@ -251,7 +270,8 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 	@Override
 	public void onTest() {
 		//Window.alert(UserAccount.getUser() + "");
-		getCountUserInRoom();
+		//getCountUserInRoom();
+		onGetMessages();
 	}
 	public void callBack(){
 		getView().showAlert("test");
