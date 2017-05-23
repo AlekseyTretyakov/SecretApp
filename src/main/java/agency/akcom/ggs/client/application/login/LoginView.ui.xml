@@ -9,17 +9,18 @@
 			<b:FieldSet>
 		    <b:Legend>Login form</b:Legend>
 		
-		 	<b:FormGroup>
+		 	<b:FormGroup ui:field="formGroupName">
 		      <b:FormLabel for="formName">Name</b:FormLabel>
 		      <b:TextBox ui:field="userName" placeholder="blabla" b:id="formName"/>
 		    </b:FormGroup>
 		    
-		    <b:FormGroup>
+		    <b:FormGroup ui:field="formGroupPass">
 		      <b:FormLabel for="formPassword">Password</b:FormLabel>
 		      <b:Input ui:field="userPass" type="PASSWORD" b:id="formPassword"/>
 		    </b:FormGroup>
 		
 		    <b:Button ui:field="btnConfirm" type="PRIMARY">Send</b:Button>
+		    <b.html:Strong ui:field="err"></b.html:Strong>
 		  </b:FieldSet>
 		</b:Form>
 	</b:Container>

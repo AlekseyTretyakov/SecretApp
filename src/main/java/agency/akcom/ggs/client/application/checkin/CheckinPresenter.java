@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.web.bindery.event.shared.EventBus;
@@ -21,14 +22,13 @@ import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 
 import agency.akcom.ggs.client.NameTokens;
 import agency.akcom.ggs.client.application.ApplicationPresenter;
+import agency.akcom.ggs.client.event.AuthEvent;
 import agency.akcom.ggs.client.security.CurrentUser;
 import agency.akcom.ggs.client.security.UserAccount;
 import agency.akcom.ggs.shared.action.AddUserAction;
 import agency.akcom.ggs.shared.action.AddUserResult;
 import agency.akcom.ggs.shared.action.CheckUserExistAction;
 import agency.akcom.ggs.shared.action.CheckUserExistResult;
-import agency.akcom.ggs.shared.action.GetOpenValuesAction;
-import agency.akcom.ggs.shared.action.GetOpenValuesResult;
 
 
 public class CheckinPresenter extends Presenter<CheckinPresenter.MyView, CheckinPresenter.MyProxy>
@@ -47,6 +47,7 @@ public class CheckinPresenter extends Presenter<CheckinPresenter.MyView, Checkin
     private final CurrentUser currentUser;
     private final DispatchAsync dispatcher;	
     private final PlaceManager	placeManager;
+    private final EventBus eventBus;
     Logger logger = Logger.getLogger("TestLogger");
     
     @Inject
@@ -62,6 +63,7 @@ public class CheckinPresenter extends Presenter<CheckinPresenter.MyView, Checkin
     	this.currentUser = currentUser;
         this.dispatcher = dispatcher;
         this.placeManager = placeManager;
+        this.eventBus = eventBus;
         getView().setUiHandlers(this);
     }
 
@@ -82,8 +84,8 @@ public class CheckinPresenter extends Presenter<CheckinPresenter.MyView, Checkin
 				currentUser.setLoggedIn(true);
 				logger.log(Level.INFO, "name " + name);
 				UserAccount.setUser(name);
-				
-				goToChatPage();
+				UserAccount.setloggediIn(true);
+				goToHomePage();
 		}});
 	}
 
@@ -104,7 +106,10 @@ public class CheckinPresenter extends Presenter<CheckinPresenter.MyView, Checkin
 				getView().checkUserName(result.getCheck());
 		}});
 	}
-	public void goToChatPage() {
+	public void goToHomePage() {
+		
+		Cookies.setCookie("userName", UserAccount.getUser());
+		eventBus.fireEvent(new AuthEvent());
 		
 		PlaceRequest placeRequest = new PlaceRequest.Builder()
                 .nameToken(NameTokens.HOME)

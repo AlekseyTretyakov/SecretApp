@@ -63,4 +63,9 @@ public class Crypto implements ICrypto{
 		return rand;
 	}
 	
+	public static double cryptPass(String pass, double key){
+		int[] code = digitize(pass);
+		int[] newCode = new int[code.length];
+		return 0;
+	}
 }

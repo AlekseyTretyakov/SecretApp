@@ -4,6 +4,7 @@ import com.gwtplatform.dispatch.rpc.server.guice.HandlerModule;
 
 import agency.akcom.ggs.shared.action.AddUserAction;
 import agency.akcom.ggs.shared.action.AddUserAtRoomAction;
+import agency.akcom.ggs.shared.action.AuthUserAction;
 import agency.akcom.ggs.shared.action.CheckCountUsersAction;
 import agency.akcom.ggs.shared.action.CheckUserExistAction;
 import agency.akcom.ggs.shared.action.FetchAdminTaskCountAction;
@@ -29,5 +30,6 @@ public class ServerModule extends HandlerModule{
 		bindHandler(AddUserAction.class, AddUserHandler.class);
 		bindHandler(AddUserAtRoomAction.class, AddUserAtRoomHandler.class);
 		bindHandler(CheckCountUsersAction.class, CheckCountUsersHandler.class);
+		bindHandler(AuthUserAction.class, AuthUserHandler.class);
 	}
 }

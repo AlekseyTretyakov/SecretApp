@@ -99,7 +99,6 @@ public class ChatServer {
 		rooms.remove(room);
 	}
 	
-	
 	public String addMsg(String text, String userName) {
 		String time = new Date().toString();
 		index++;
