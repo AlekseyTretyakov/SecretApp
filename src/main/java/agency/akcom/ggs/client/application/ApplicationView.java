@@ -1,5 +1,8 @@
 package agency.akcom.ggs.client.application;
 
+import org.gwtbootstrap3.client.ui.NavbarLink;
+import org.gwtbootstrap3.client.ui.html.Strong;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -18,6 +21,14 @@ public class ApplicationView extends ViewWithUiHandlers<ApplicationUiHandlers> i
 	
 	@UiField 
 	SimplePanel contentContainer;
+	@UiField
+	Strong userNameField;
+	@UiField
+	NavbarLink logIn;
+	@UiField
+	NavbarLink checkIn;
+	@UiField
+	NavbarLink logOut;
 	
 	@Inject
 	ApplicationView(Binder uiBinder) {
@@ -39,4 +50,28 @@ public class ApplicationView extends ViewWithUiHandlers<ApplicationUiHandlers> i
 			 super.setInSlot(slot, content);
 		 }
 	 }
+	@Override
+	public void setUserName(String name) {
+		userNameField.setText("Hello, " +  name + "!");
+		logIn.setVisible(false);
+		checkIn.setVisible(false);
+		logOut.setVisible(true);
+	}
+	
+	@UiHandler("logIn")
+	void goToLogin(ClickEvent event){
+		getUiHandlers().onLogin();
+	}
+	@UiHandler("checkIn")
+	void goToCheckin(ClickEvent event){
+		getUiHandlers().onCheckin();
+	}
+	@UiHandler("logOut")
+	void goToLogout(ClickEvent event){
+		userNameField.setText("Hello, Guest!");
+		logIn.setVisible(true);
+		checkIn.setVisible(true);
+		logOut.setVisible(false);
+		getUiHandlers().onLogout();
+	}
 }

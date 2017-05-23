@@ -2,6 +2,7 @@ package agency.akcom.ggs.client.security;
 
 import javax.inject.Inject;
 
+import com.google.gwt.user.client.Window;
 import com.gwtplatform.mvp.client.annotations.DefaultGatekeeper;
 import com.gwtplatform.mvp.client.proxy.Gatekeeper;
 
@@ -17,7 +18,9 @@ public class LoggedInGatekeeper implements Gatekeeper{
 	}
 	@Override
 	public boolean canReveal() {
-		return currentUser.isLoggedIn();
+		//Window.alert(UserAccount.getUser());
+		return UserAccount.loggedIn();
+		//return currentUser.isLoggedIn();
 	}
 
 }

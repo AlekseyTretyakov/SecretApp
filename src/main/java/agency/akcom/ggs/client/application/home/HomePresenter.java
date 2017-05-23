@@ -37,7 +37,6 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
     @ProxyStandard
     @NameToken(NameTokens.HOME)
-    @NoGatekeeper
     interface MyProxy extends ProxyPlace<HomePresenter> {
     }
     
@@ -107,12 +106,6 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 			}
 			
 		});
-		
-		/*PlaceRequest placeRequest = new PlaceRequest.Builder()
-                .nameToken(NameTokens.CHAT)
-                .with(ParametrTokens.ch, "0")
-                .build();
-        placeManager.revealPlace(placeRequest);*/
 	}
 
 	

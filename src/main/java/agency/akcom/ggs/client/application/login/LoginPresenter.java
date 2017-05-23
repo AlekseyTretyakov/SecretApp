@@ -2,7 +2,9 @@ package agency.akcom.ggs.client.application.login;
 
 import javax.inject.Inject;
 
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.rpc.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.HasUiHandlers;
@@ -17,8 +19,11 @@ import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 
 import agency.akcom.ggs.client.NameTokens;
 import agency.akcom.ggs.client.application.ApplicationPresenter;
+import agency.akcom.ggs.client.event.AuthEvent;
 import agency.akcom.ggs.client.security.CurrentUser;
 import agency.akcom.ggs.client.security.UserAccount;
+import agency.akcom.ggs.shared.action.AuthUserAction;
+import agency.akcom.ggs.shared.action.AuthUserResult;
 
 public class LoginPresenter extends Presenter<LoginPresenter.MyView, LoginPresenter.MyProxy>
 		implements LoginUiHandlers {
@@ -29,6 +34,7 @@ public class LoginPresenter extends Presenter<LoginPresenter.MyView, LoginPresen
     }
 
     interface MyView extends View, HasUiHandlers<LoginUiHandlers> {
+    	void setWarInputs(boolean auth);
     }
     
     private static final String USERNAME = "admin";
@@ -36,6 +42,7 @@ public class LoginPresenter extends Presenter<LoginPresenter.MyView, LoginPresen
     private final CurrentUser currentUser;
     private final DispatchAsync dispatcher;	
     private final PlaceManager	placeManager;
+    private final EventBus eventBus;
     
     @Inject
     LoginPresenter(
@@ -50,25 +57,40 @@ public class LoginPresenter extends Presenter<LoginPresenter.MyView, LoginPresen
         this.currentUser = currentUser;
         this.dispatcher = dispatcher;
         this.placeManager = placeManager;
+        this.eventBus = eventBus;
         getView().setUiHandlers(this);
     }
 
 	@Override
-	public void onConfirm(String userName, String userPass) {
-		if (validateCredentials(userName, userPass)) {
-			currentUser.setUser(userName);
-            currentUser.setLoggedIn(true);
-            
-            UserAccount.setUser(userName);
-            
-            PlaceRequest placeRequest = new PlaceRequest.Builder()
-                    .nameToken(NameTokens.CHAT)
-                    .build();
-            placeManager.revealPlace(placeRequest);
-        }
+	public void onConfirm(final String userName, String userPass) {
+		
+		dispatcher.execute(new AuthUserAction(userName, userPass), new AsyncCallback<AuthUserResult>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert(caught + "");
+			}
+
+
+			@Override
+			public void onSuccess(AuthUserResult result) {
+				getView().setWarInputs(result.getAuth());
+				UserAccount.setUser(userName);
+				UserAccount.setloggediIn(true);
+				currentUser.setUser(userName);
+				currentUser.setLoggedIn(true);
+				Cookies.setCookie("userName", userName);
+				
+				eventBus.fireEvent(new AuthEvent()); 
+				
+				PlaceRequest placeRequest = new PlaceRequest.Builder()
+	                    .nameToken(NameTokens.HOME)
+	                    .build();
+	            placeManager.revealPlace(placeRequest);
+			}
+			
+		});
+		
+		
 	}
-	private boolean validateCredentials(String username, String password) {
-		return true;
-        //return username.equals(USERNAME) && password.equals(PASSWORD);
-    }
 }

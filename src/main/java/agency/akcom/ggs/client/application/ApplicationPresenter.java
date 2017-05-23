@@ -4,6 +4,7 @@ import javax.inject.Inject;
 
 import com.google.gwt.event.shared.GwtEvent.Type;
 import com.google.gwt.event.shared.HasHandlers;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.HasUiHandlers;
@@ -19,9 +20,13 @@ import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import agency.akcom.ggs.client.NameTokens;
 import agency.akcom.ggs.client.application.ApplicationPresenter.MyProxy;
 import agency.akcom.ggs.client.application.ApplicationPresenter.MyView;
+import agency.akcom.ggs.client.event.AuthEvent;
+import agency.akcom.ggs.client.event.AuthEventHandler;
+import agency.akcom.ggs.client.security.UserAccount;
 
 public class ApplicationPresenter extends Presenter<MyView, MyProxy> implements ApplicationUiHandlers{
     interface MyView extends View, HasUiHandlers<ApplicationUiHandlers>{
+    	void setUserName(String name);
     }
 
     @ProxyStandard
@@ -29,6 +34,7 @@ public class ApplicationPresenter extends Presenter<MyView, MyProxy> implements 
     }
     
     private PlaceManager placeManager;
+    private final EventBus eventBus;
     public static final Type<RevealContentHandler<?>> TYPE_SetMainContent = new Type<>();
     public static final NestedSlot SLOT_MAIN = new NestedSlot();
 
@@ -40,24 +46,44 @@ public class ApplicationPresenter extends Presenter<MyView, MyProxy> implements 
             PlaceManager placeManager) {
         super(eventBus, view, proxy, RevealType.Root);
         
+        this.eventBus = eventBus;
         this.placeManager = placeManager;
-        
+        eventsAuth();
     	getView().setUiHandlers(this);
     }
+    public void eventsAuth() {
+    	eventBus.addHandler(AuthEvent.TYPE, new AuthEventHandler(){
 
-	/*@Override
-	public void onClickHome() {
+			@Override
+			public void auth(AuthEvent event) {
+				getView().setUserName(UserAccount.getUser());
+			}});
+    }
+	@Override
+	public void onLogin() {
 		PlaceRequest request = new PlaceRequest.Builder()
-                .nameToken(NameTokens.HOME)
+                .nameToken(NameTokens.LOGIN)
                 .build();
         placeManager.revealPlace(request);
 	}
-
 	@Override
-	public void onClickSome() {
+	public void onCheckin() {
 		PlaceRequest request = new PlaceRequest.Builder()
-                .nameToken(NameTokens.SOME)
+                .nameToken(NameTokens.CHECKIN)
                 .build();
         placeManager.revealPlace(request);
-	}*/
+	}
+	@Override
+	public void onLogout() {
+		//TODO UserAccount.clear & Cookies.clear
+		UserAccount.setKey(0);
+		UserAccount.setUser("Guest");
+		UserAccount.setloggediIn(false);
+		Cookies.removeCookie("userName");
+		Cookies.removeCookie("key");
+		PlaceRequest request = new PlaceRequest.Builder()
+                .nameToken(NameTokens.LOGIN)
+                .build();
+        placeManager.revealPlace(request);
+	}
 }

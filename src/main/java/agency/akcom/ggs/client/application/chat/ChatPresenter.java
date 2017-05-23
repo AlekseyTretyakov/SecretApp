@@ -1,14 +1,11 @@
 package agency.akcom.ggs.client.application.chat;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
-import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -39,8 +36,6 @@ import agency.akcom.ggs.shared.action.GetUserListAtRoomAction;
 import agency.akcom.ggs.shared.action.GetUserListAtRoomResult;
 import agency.akcom.ggs.shared.action.SendOpenKeyToServerAction;
 import agency.akcom.ggs.shared.action.SendOpenKeyToServerResult;
-import agency.akcom.ggs.shared.action.SukaAction;
-import agency.akcom.ggs.shared.action.SukaResult;
 import agency.akcom.ggs.shared.crypt.Crypto;
 
 public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter.MyProxy>  
@@ -53,7 +48,6 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 	}
 	@ProxyStandard
 	@NameToken(NameTokens.CHAT)
-	@NoGatekeeper
 	interface MyProxy extends ProxyPlace<ChatPresenter> {
 		
 	}
@@ -83,18 +77,14 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 		this.placeManager = placeManager;
 		getView().setUiHandlers(this);
 
-		room = Integer.parseInt(placeManager.getCurrentPlaceRequest().getParameter("ch", ""));
-		logger.log(Level.INFO, "channel " +  room + "; user " + UserAccount.getUser());
+		/*if (UserAccount.getAccess() == true){
+			room = Integer.parseInt(placeManager.getCurrentPlaceRequest().getParameter("ch", ""));
+			logger.log(Level.INFO, "channel " +  room + "; user " + UserAccount.getUser());
+			createOpenKey();
+		} else {
+			gotoLogin();
+		}*/
 		
-		createOpenKey();
-		//setRequestTimer();
-		/*
-		 * Search public key at localStorage or create new
-		 */
-		/*
-		 * Request messages from the ChatServer
-		 */
-		//setRequestTimer();
 	}
 	@Override
 	public void onSendMessage(String msg) {
@@ -179,6 +169,8 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 				logger.log(Level.INFO, "open key: " + openKey);
 				logger.log(Level.INFO, "user: " + UserAccount.getUser());
 				//getView().showAlert("open key: " + openKey);
+				UserAccount.setKey(openKey);
+				Cookies.setCookie("key", openKey + "");
 				sendPublicKeyToServer(UserAccount.getUser(), openKey);
 			}
 			
@@ -285,5 +277,11 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 		      }
 		    };
 	    timer.scheduleRepeating(3000);
+	}
+	public void gotoLogin() {
+		PlaceRequest placeRequest = new PlaceRequest.Builder()
+                .nameToken(NameTokens.LOGIN)
+                .build();
+        placeManager.revealPlace(placeRequest);
 	}
 }

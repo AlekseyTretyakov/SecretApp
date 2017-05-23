@@ -35,4 +35,14 @@ public class UserServer {
 		}
 		return true;
 	}
+	public boolean checkAuth(String name, String pass) {
+		for (User user: users) {
+			if (user.getName().equals(name) == true){
+				if (user.getPass().equals(pass) == true)
+					 return true;
+				else return false;
+			}
+		}
+		return false;
+	}
 }
