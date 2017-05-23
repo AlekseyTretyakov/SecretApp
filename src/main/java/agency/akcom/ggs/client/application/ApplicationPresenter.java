@@ -1,5 +1,8 @@
 package agency.akcom.ggs.client.application;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.inject.Inject;
 
 import com.google.gwt.event.shared.GwtEvent.Type;
@@ -22,6 +25,7 @@ import agency.akcom.ggs.client.application.ApplicationPresenter.MyProxy;
 import agency.akcom.ggs.client.application.ApplicationPresenter.MyView;
 import agency.akcom.ggs.client.event.AuthEvent;
 import agency.akcom.ggs.client.event.AuthEventHandler;
+import agency.akcom.ggs.client.security.IsCustomGatekeeper;
 import agency.akcom.ggs.client.security.UserAccount;
 
 public class ApplicationPresenter extends Presenter<MyView, MyProxy> implements ApplicationUiHandlers{
@@ -35,6 +39,8 @@ public class ApplicationPresenter extends Presenter<MyView, MyProxy> implements 
     
     private PlaceManager placeManager;
     private final EventBus eventBus;
+    private final IsCustomGatekeeper gatekeeper;
+    private Logger logger = Logger.getLogger("logger");
     public static final Type<RevealContentHandler<?>> TYPE_SetMainContent = new Type<>();
     public static final NestedSlot SLOT_MAIN = new NestedSlot();
 
@@ -43,19 +49,24 @@ public class ApplicationPresenter extends Presenter<MyView, MyProxy> implements 
             EventBus eventBus,
             MyView view,
             MyProxy proxy,
-            PlaceManager placeManager) {
+            PlaceManager placeManager,
+            IsCustomGatekeeper gatekeeper) {
         super(eventBus, view, proxy, RevealType.Root);
         
         this.eventBus = eventBus;
         this.placeManager = placeManager;
+        this.gatekeeper = gatekeeper;
         eventsAuth();
+        //tryAuth();
     	getView().setUiHandlers(this);
     }
     public void eventsAuth() {
+    	logger.log(Level.INFO, "events auth  func");
     	eventBus.addHandler(AuthEvent.TYPE, new AuthEventHandler(){
 
 			@Override
 			public void auth(AuthEvent event) {
+				logger.log(Level.INFO, "event auth fire");
 				getView().setUserName(UserAccount.getUser());
 			}});
     }
@@ -85,5 +96,14 @@ public class ApplicationPresenter extends Presenter<MyView, MyProxy> implements 
                 .nameToken(NameTokens.LOGIN)
                 .build();
         placeManager.revealPlace(request);
+	}
+	public void tryAuth() {
+		String userName = Cookies.getCookie("userName");
+		if (userName != null){
+			UserAccount.setUser(userName);
+			UserAccount.setloggediIn(true);
+			eventBus.fireEvent(new AuthEvent());
+			Window.alert("eee");
+		}
 	}
 }

@@ -5,6 +5,8 @@ import javax.inject.Inject;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.PanelBody;
 import org.gwtbootstrap3.client.ui.TextBox;
+import org.gwtbootstrap3.client.ui.html.Paragraph;
+import org.gwtbootstrap3.client.ui.html.Span;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -48,7 +50,12 @@ public class ChatView extends ViewWithUiHandlers<ChatUiHandlers> implements Chat
 	public void showMessages(String[] msgs) {
 		for (int i = 0; i < msgs.length; i++){
 			Label label = new Label(msgs[i]);
-			msgBlock.add(label);
+			Paragraph p = new Paragraph();
+			Span sp1 = new Span("User");
+			Span sp2 = new Span("Hello, boys!");
+			p.add(sp1);
+			p.add(sp2);
+			msgBlock.add(p);
 		}
 	}
 
