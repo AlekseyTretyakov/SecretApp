@@ -12,6 +12,7 @@ import agency.akcom.ggs.shared.action.GetAliasKeyAction;
 import agency.akcom.ggs.shared.action.GetNewMessageAction;
 import agency.akcom.ggs.shared.action.GetOpenValuesAction;
 import agency.akcom.ggs.shared.action.GetUserListAtRoomAction;
+import agency.akcom.ggs.shared.action.SendMessageAction;
 import agency.akcom.ggs.shared.action.SendOpenKeyToServerAction;
 import agency.akcom.ggs.shared.action.SukaAction;
 
@@ -19,9 +20,10 @@ public class ServerModule extends HandlerModule{
 
 	@Override
 	protected void configureHandlers() {
-		bindHandler(FetchAdminTaskCountAction.class, FetchAdminTaskCountHandler.class);
+		//bindHandler(FetchAdminTaskCountAction.class, FetchAdminTaskCountHandler.class);
 		bindHandler(GetNewMessageAction.class, GetNewMessageHandler.class);
 		bindHandler(GetOpenValuesAction.class, GetOpenValuesHandler.class);
+		bindHandler(SendMessageAction.class, SendMessageHandler.class);
 		bindHandler(SukaAction.class, SukaHandler.class);
 		bindHandler(GetUserListAtRoomAction.class, GetUserListAtRoomHandler.class);
 		bindHandler(SendOpenKeyToServerAction.class, SendOpenKeyToServerHandler.class);
