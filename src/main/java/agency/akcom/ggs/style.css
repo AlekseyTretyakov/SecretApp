@@ -6,16 +6,21 @@
 	margin-top: 35px;
 	border-color: #104e58;
 }
-#chat-container .panel-heading {
+#chat-container .panel-primary {
+	margin-top: 35px;
+}
+/* #chat-container .panel-heading {
     color: rgba(8, 8, 8, 0.66);
     background-color: rgba(51, 122, 183, 0.98);
     border-color: #1d2427;
-}
+} */
 #chat-container .panel-footer #sendBtn {
 	margin-right: 9px;
 }
 #chat-body {
-	
+	min-height: 380px;
+	max-height: 380px;
+	overflow-y: scroll;
 }
 #chat-body p span {
 	color: #337ab7;
@@ -34,6 +39,17 @@
 }
 HR{
 	border-top: 1px solid #ddd;
+}
+#footer-container {
+	margin: 0;
+	width: 100%;
+}
+#footer-block {
+	margin-bottom: 18px;
+}
+
+#main-container {
+	min-height: 531px;	
 }
 
 /*Check in page*/

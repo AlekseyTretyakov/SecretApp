@@ -90,10 +90,11 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 		} else {
 			gotoLogin();
 		}*/
+		room = Integer.parseInt(placeManager.getCurrentPlaceRequest().getParameter("ch", ""));
+		logger.log(Level.INFO, "channel " +  room + "; user " + UserAccount.getUser());
 		createOpenKey();
 	}
-	@Override
-	public void onSendMessage(String msg) {
+	public void onSendMessage2(String msg) {
 		final String[] msgs = {UserAccount.getUser()};
 		msgs[0] += " " + msg;
 		
@@ -119,8 +120,9 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 		});
 		this.lastIndMsg++;
 	}
-	public void onSendMessage2(final String msg) {
-		dispatcher.execute(new SendMessageAction(msg, UserAccount.getUser()), new AsyncCallback<SendMessageResult>(){
+	@Override
+	public void onSendMessage(final String msg) {
+		dispatcher.execute(new SendMessageAction(Crypto.crypt(msg, secretKey), UserAccount.getUser()), new AsyncCallback<SendMessageResult>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -133,6 +135,7 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 				ms.add(new Message(msg, result.getIndex(), result.getDate(), UserAccount.getUser()));
 				getView().showMsgs(ms);
 			}});
+		this.lastIndMsg++;
 	}
 	@Override
 	public void onGetMessages() {
@@ -141,7 +144,7 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 			final String[] msgs = {};
 			@Override
 			public void onFailure(Throwable arg0) {
-				getView().showAlert("fail");
+				getView().showAlert(arg0 + "");
 				
 			}
 
@@ -155,14 +158,16 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 				user = result.getUser();
 				time = result.getTime();
 				index = result.getIndex();
+				List<Message> ms = new ArrayList<>();
 				if (result.isNotEmpty()) {
 					for (int i = 0; i < text.length; i++){
 						logger.log(Level.INFO, text[i]);
 						String txt = Crypto.decrypt(text[i], secretKey);
+						ms.add(new Message(txt, index[i], time[i], user[i]));
 						msgs[i] = user[i] + " " + txt + " " + time[i]; 
 						lastIndMsg++;
 					}
-					getView().showMessages(msgs);
+					getView().showMsgs(ms);
 				}
 			}
 		});
@@ -186,6 +191,8 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 				secretValue = Crypto.randomSecretKey();
 				cryptValP = result.getValueP();
 				cryptValG = result.getValueG();
+				logger.log(Level.INFO, "secret value: " + secretValue + " cryptValP: " 
+						+ cryptValP + " cryptValG: " + cryptValG);
 				openKey = Crypto.getOpenKey(secretValue, cryptValP, cryptValG);
 				//Window.alert(openKey + "");
 				//Window.alert(UserAccount.getUser());
@@ -194,7 +201,7 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 				//getView().showAlert("open key: " + openKey);
 				UserAccount.setKey(openKey);
 				Cookies.setCookie("key", openKey + "");
-				//sendPublicKeyToServer(UserAccount.getUser(), openKey);
+				sendPublicKeyToServer(UserAccount.getUser(), openKey);
 			}
 			
 		});
@@ -287,7 +294,7 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 		//Window.alert(UserAccount.getUser() + "");
 		//getCountUserInRoom();
 		//onGetMessages();
-		onSendMessage2("Hi boys");
+		onSendMessage("Hi boys");
 		//test();
 	}
 	public void callBack(){

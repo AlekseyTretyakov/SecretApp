@@ -10,7 +10,7 @@
 		<b:Navbar styleName="navbar-inverse">
 			<b:Container>
 				<b:NavbarHeader>
-					<b:NavbarBrand>Brand</b:NavbarBrand>
+					<b:NavbarBrand>Secret app</b:NavbarBrand>
 					<b:NavbarCollapseButton dataTarget="#navbar-collapse" />
 				</b:NavbarHeader>
 				<b:NavbarCollapse b:id="navbar-collapse">
@@ -34,16 +34,16 @@
 				</b:NavbarCollapse>
 			</b:Container>
 		</b:Navbar>
-		<b:Container>
+		<b:Container b:id="main-container">
 			<b:Row>
 				<b:Column size="MD_12">
 					<g:SimplePanel ui:field="contentContainer" />
 				</b:Column>
 			</b:Row>
 		</b:Container>
-		<b:Container>
+		<b:Container b:id="footer-container">
 			<b:Row>
-				<b:Column size="MD_12">
+				<b:Column size="MD_12" b:id="footer-block">
 					<b.html:Hr></b.html:Hr>
 					<b.html:Strong>Tretyakov Aleksey 2017, Graduation project - 
 					Private key generation over an open channel</b.html:Strong>
