@@ -1,5 +1,7 @@
 package agency.akcom.ggs.client.application.chat;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,6 +26,7 @@ import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import agency.akcom.ggs.client.NameTokens;
 import agency.akcom.ggs.client.application.ApplicationPresenter;
 import agency.akcom.ggs.client.security.UserAccount;
+import agency.akcom.ggs.shared.Message;
 import agency.akcom.ggs.shared.action.FetchAdminTaskCountAction;
 import agency.akcom.ggs.shared.action.FetchAdminTaskCountResult;
 import agency.akcom.ggs.shared.action.GetAliasKeyAction;
@@ -34,6 +37,8 @@ import agency.akcom.ggs.shared.action.GetOpenValuesAction;
 import agency.akcom.ggs.shared.action.GetOpenValuesResult;
 import agency.akcom.ggs.shared.action.GetUserListAtRoomAction;
 import agency.akcom.ggs.shared.action.GetUserListAtRoomResult;
+import agency.akcom.ggs.shared.action.SendMessageAction;
+import agency.akcom.ggs.shared.action.SendMessageResult;
 import agency.akcom.ggs.shared.action.SendOpenKeyToServerAction;
 import agency.akcom.ggs.shared.action.SendOpenKeyToServerResult;
 import agency.akcom.ggs.shared.crypt.Crypto;
@@ -45,6 +50,7 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 		void showMessages(String[] msgs);
 		void showAlert(String alert);
 		void setEnabledButton();
+		void showMsgs(List<Message> msg);
 	}
 	@ProxyStandard
 	@NameToken(NameTokens.CHAT)
@@ -84,7 +90,7 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 		} else {
 			gotoLogin();
 		}*/
-		
+		createOpenKey();
 	}
 	@Override
 	public void onSendMessage(String msg) {
@@ -100,7 +106,7 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 
 			@Override
 			public void onFailure(Throwable arg0) {
-				getView().showAlert("fail");
+				getView().showAlert(arg0 + "");
 				
 			}
 
@@ -112,6 +118,21 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 			}
 		});
 		this.lastIndMsg++;
+	}
+	public void onSendMessage2(final String msg) {
+		dispatcher.execute(new SendMessageAction(msg, UserAccount.getUser()), new AsyncCallback<SendMessageResult>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert(caught + "");
+			}
+
+			@Override
+			public void onSuccess(SendMessageResult result) {
+				List<Message> ms = new ArrayList<>();
+				ms.add(new Message(msg, result.getIndex(), result.getDate(), UserAccount.getUser()));
+				getView().showMsgs(ms);
+			}});
 	}
 	@Override
 	public void onGetMessages() {
@@ -166,12 +187,14 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 				cryptValP = result.getValueP();
 				cryptValG = result.getValueG();
 				openKey = Crypto.getOpenKey(secretValue, cryptValP, cryptValG);
+				//Window.alert(openKey + "");
+				//Window.alert(UserAccount.getUser());
 				logger.log(Level.INFO, "open key: " + openKey);
 				logger.log(Level.INFO, "user: " + UserAccount.getUser());
 				//getView().showAlert("open key: " + openKey);
 				UserAccount.setKey(openKey);
 				Cookies.setCookie("key", openKey + "");
-				sendPublicKeyToServer(UserAccount.getUser(), openKey);
+				//sendPublicKeyToServer(UserAccount.getUser(), openKey);
 			}
 			
 		});
@@ -263,10 +286,33 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 	public void onTest() {
 		//Window.alert(UserAccount.getUser() + "");
 		//getCountUserInRoom();
-		onGetMessages();
+		//onGetMessages();
+		onSendMessage2("Hi boys");
+		//test();
 	}
 	public void callBack(){
 		getView().showAlert("test");
+	}
+	public void test() {
+		final String mess = "hello";
+		Window.alert(mess);
+		FetchAdminTaskCountAction action = new FetchAdminTaskCountAction(mess, UserAccount.getUser());
+		
+		dispatcher.execute(action, new AsyncCallback<FetchAdminTaskCountResult>(){
+
+			@Override
+			public void onFailure(Throwable arg0) {
+				Window.alert(arg0 + "");
+				
+			}
+
+			@Override
+			public void onSuccess(FetchAdminTaskCountResult result) {
+				//getView().showAlert("" + result.getMessage());
+				//getView().showMsgs(mess, UserAccount.getUser(), result.getTime());
+			}
+		});
+		this.lastIndMsg++;
 	}
 	public void setRequestTimer() {
 		

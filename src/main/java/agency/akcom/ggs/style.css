@@ -1,0 +1,48 @@
+@CHARSET "UTF-8";
+#chat-container {
+	width: 82%;
+}
+#chat-container .panel-info {
+	margin-top: 35px;
+	border-color: #104e58;
+}
+#chat-container .panel-heading {
+    color: rgba(8, 8, 8, 0.66);
+    background-color: rgba(51, 122, 183, 0.98);
+    border-color: #1d2427;
+}
+#chat-container .panel-footer #sendBtn {
+	margin-right: 9px;
+}
+#chat-body {
+	
+}
+#chat-body p span {
+	color: #337ab7;
+    font-size: 20px;
+    margin-right: 40px;
+}
+#chat-body p span + span {
+    color: #555;
+}
+#chat-body p span + span + span {
+	font-size: 10px;
+    color: #a09a9a;
+    top: 14px;
+    left: -186px;
+    position: relative;
+}
+HR{
+	border-top: 1px solid #ddd;
+}
+
+/*Check in page*/
+#checkin-container {
+	margin-top: 100px;
+}
+
+
+/*Login page*/
+#login-container {
+	margin-top: 100px;
+}

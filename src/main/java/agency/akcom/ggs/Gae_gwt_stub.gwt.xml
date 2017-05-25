@@ -34,5 +34,12 @@
 	<!-- Specify the paths for translatable code -->
 	<source path='client' />
 	<source path='shared' />
-
+	
+	
+	<public path=''>
+ 		<include name='*.css' />
+ 	</public>
+ 	<!-- theme -->
+ 	<stylesheet src='style.css' />
+	
 </module>

@@ -5,7 +5,7 @@
 	xmlns:b.html="urn:import:org.gwtbootstrap3.client.ui.html">
 	
 	
-	<b:Container>
+	<b:Container b:id="checkin-container">
 		<b:Form>
 			<b:FieldSet>
 		    <b:Legend>Check In form</b:Legend>
