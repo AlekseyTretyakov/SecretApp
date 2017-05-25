@@ -37,8 +37,6 @@ public class LoginPresenter extends Presenter<LoginPresenter.MyView, LoginPresen
     	void setWarInputs(boolean auth);
     }
     
-    private static final String USERNAME = "admin";
-    private static final String PASSWORD = "admin";
     private final CurrentUser currentUser;
     private final DispatchAsync dispatcher;	
     private final PlaceManager	placeManager;
@@ -59,6 +57,8 @@ public class LoginPresenter extends Presenter<LoginPresenter.MyView, LoginPresen
         this.placeManager = placeManager;
         this.eventBus = eventBus;
         getView().setUiHandlers(this);
+        
+        //tryAuth();
     }
 
 	@Override
@@ -75,22 +75,30 @@ public class LoginPresenter extends Presenter<LoginPresenter.MyView, LoginPresen
 			@Override
 			public void onSuccess(AuthUserResult result) {
 				getView().setWarInputs(result.getAuth());
-				UserAccount.setUser(userName);
-				UserAccount.setloggediIn(true);
-				currentUser.setUser(userName);
-				currentUser.setLoggedIn(true);
-				Cookies.setCookie("userName", userName);
-				
-				eventBus.fireEvent(new AuthEvent()); 
-				
-				PlaceRequest placeRequest = new PlaceRequest.Builder()
-	                    .nameToken(NameTokens.HOME)
-	                    .build();
-	            placeManager.revealPlace(placeRequest);
+				if (result.getAuth() == true){
+					UserAccount.setUser(userName);
+					UserAccount.setloggediIn(true);
+					currentUser.setUser(userName);
+					currentUser.setLoggedIn(true);
+					Cookies.setCookie("userName", userName);
+					
+					eventBus.fireEvent(new AuthEvent()); 
+					
+					PlaceRequest placeRequest = new PlaceRequest.Builder()
+		                    .nameToken(NameTokens.HOME)
+		                    .build();
+		            placeManager.revealPlace(placeRequest);
+				}
 			}
 			
 		});
-		
-		
+	}
+	public void tryAuth() {
+		String userName = Cookies.getCookie("userName");
+		if (userName != null){
+			UserAccount.setUser(userName);
+			UserAccount.setloggediIn(true);
+			eventBus.fireEvent(new AuthEvent());
+		}
 	}
 }

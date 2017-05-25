@@ -41,5 +41,14 @@
 				</b:Column>
 			</b:Row>
 		</b:Container>
+		<b:Container>
+			<b:Row>
+				<b:Column size="MD_12">
+					<b.html:Hr></b.html:Hr>
+					<b.html:Strong>Tretyakov Aleksey 2017, Graduation project - 
+					Private key generation over an open channel</b.html:Strong>
+				</b:Column>
+			</b:Row>
+		</b:Container>
 	</g:HTMLPanel>
 </ui:UiBinder> 
