@@ -1,11 +1,7 @@
 package agency.akcom.ggs.shared.action;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.gwtplatform.dispatch.rpc.shared.Result;
 
-import agency.akcom.ggs.shared.Message;
 
 @SuppressWarnings("serial")
 public class GetNewMessageResult implements Result{
@@ -15,7 +11,6 @@ public class GetNewMessageResult implements Result{
 	private String[] user;
 	private String[] time;
 	private boolean flag = false;
-	private List<Message> msgs = new ArrayList<>();
 	
 	public GetNewMessageResult() { }
 	
@@ -24,9 +19,6 @@ public class GetNewMessageResult implements Result{
         this.index = lastIndex;
         this.time = time;
         this.user = user;
-        for (int i = 0; i < message.length; i++){
-        	msgs.add(new Message(message[i], lastIndex[i], time[i], user[i]));
-        }
         
         flag = true;
 	}
@@ -44,8 +36,5 @@ public class GetNewMessageResult implements Result{
     }
     public String[] getUser() {
     	return this.user;
-    }
-    public List<Message> getMessages() {
-    	return msgs;
     }
 }

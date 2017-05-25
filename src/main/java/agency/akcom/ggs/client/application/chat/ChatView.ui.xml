@@ -5,7 +5,7 @@
 	xmlns:b.html="urn:import:org.gwtbootstrap3.client.ui.html">
 	
 	<b:Container b:id="chat-container">
-		<b:Panel type="INFO">
+		<b:Panel type="PRIMARY">
 		  <b:PanelHeader>
 		    <b:Heading size="H3" text="Secret Chat"/>
 		  </b:PanelHeader>
