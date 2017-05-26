@@ -20,6 +20,7 @@ import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import agency.akcom.ggs.client.NameTokens;
 import agency.akcom.ggs.client.application.ApplicationPresenter;
 import agency.akcom.ggs.client.event.AuthEvent;
+import agency.akcom.ggs.client.event.RouteHomeEvent;
 import agency.akcom.ggs.client.security.CurrentUser;
 import agency.akcom.ggs.client.security.UserAccount;
 import agency.akcom.ggs.shared.action.AuthUserAction;
@@ -82,7 +83,8 @@ public class LoginPresenter extends Presenter<LoginPresenter.MyView, LoginPresen
 					currentUser.setLoggedIn(true);
 					Cookies.setCookie("userName", userName);
 					
-					eventBus.fireEvent(new AuthEvent()); 
+					eventBus.fireEvent(new AuthEvent());
+					eventBus.fireEvent(new RouteHomeEvent());
 					
 					PlaceRequest placeRequest = new PlaceRequest.Builder()
 		                    .nameToken(NameTokens.HOME)

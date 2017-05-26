@@ -25,6 +25,7 @@ import agency.akcom.ggs.client.application.ApplicationPresenter.MyProxy;
 import agency.akcom.ggs.client.application.ApplicationPresenter.MyView;
 import agency.akcom.ggs.client.event.AuthEvent;
 import agency.akcom.ggs.client.event.AuthEventHandler;
+import agency.akcom.ggs.client.event.RouteHomeEvent;
 import agency.akcom.ggs.client.security.IsCustomGatekeeper;
 import agency.akcom.ggs.client.security.UserAccount;
 
@@ -87,11 +88,14 @@ public class ApplicationPresenter extends Presenter<MyView, MyProxy> implements 
 	@Override
 	public void onLogout() {
 		//TODO UserAccount.clear & Cookies.clear
+		//TODO удаление на сервере поьзователей в комнате
 		UserAccount.setKey(0);
 		UserAccount.setUser("Guest");
 		UserAccount.setloggediIn(false);
+		UserAccount.setChannel(-1);
 		Cookies.removeCookie("userName");
 		Cookies.removeCookie("key");
+		Cookies.removeCookie("channel");
 		PlaceRequest request = new PlaceRequest.Builder()
                 .nameToken(NameTokens.LOGIN)
                 .build();
@@ -105,5 +109,10 @@ public class ApplicationPresenter extends Presenter<MyView, MyProxy> implements 
 			eventBus.fireEvent(new AuthEvent());
 			Window.alert("eee");
 		}
+	}
+	@Override
+	public void onHomeRoute() {
+		//Window.alert("home");
+		eventBus.fireEvent(new RouteHomeEvent());
 	}
 }

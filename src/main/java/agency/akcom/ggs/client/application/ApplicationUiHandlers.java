@@ -8,4 +8,5 @@ public interface ApplicationUiHandlers extends UiHandlers{
 	void onLogin();
 	void onCheckin();
 	void onLogout();
+	void onHomeRoute();
 }

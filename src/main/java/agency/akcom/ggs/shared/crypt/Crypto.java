@@ -49,7 +49,7 @@ public class Crypto implements ICrypto{
 		return newWord;
 	}
 	public static double getSahredSecretKey(double openKey, int secretKey, int p) {
-		Window.alert(openKey + " " + secretKey + " " + p );
+		//Window.alert(openKey + " " + secretKey + " " + p );
 		return Math.pow(openKey, secretKey) % p;
 	}
 	public static double getOpenKey(int secret, int p, int g) {
