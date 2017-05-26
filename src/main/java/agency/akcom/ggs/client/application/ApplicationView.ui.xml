@@ -15,7 +15,7 @@
 				</b:NavbarHeader>
 				<b:NavbarCollapse b:id="navbar-collapse">
 					<b:NavbarNav>
-						<b:AnchorListItem href="#{NameTokens.getHome}">Home</b:AnchorListItem>
+						<b:AnchorListItem href="#{NameTokens.getHome}" ui:field="linkHome">Home</b:AnchorListItem>
 						<b:AnchorListItem href="#{NameTokens.getChat}">Chat</b:AnchorListItem>
 						<b:AnchorListItem href="#{NameTokens.getLogin}">Login</b:AnchorListItem>
 						<b:AnchorListItem href="#{NameTokens.getCheckin}">Check In</b:AnchorListItem>

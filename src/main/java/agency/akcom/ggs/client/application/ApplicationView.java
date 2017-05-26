@@ -1,5 +1,6 @@
 package agency.akcom.ggs.client.application;
 
+import org.gwtbootstrap3.client.ui.AnchorListItem;
 import org.gwtbootstrap3.client.ui.NavbarLink;
 import org.gwtbootstrap3.client.ui.html.Strong;
 
@@ -29,6 +30,8 @@ public class ApplicationView extends ViewWithUiHandlers<ApplicationUiHandlers> i
 	NavbarLink checkIn;
 	@UiField
 	NavbarLink logOut;
+	@UiField
+	AnchorListItem linkHome;
 	
 	@Inject
 	ApplicationView(Binder uiBinder) {
@@ -73,5 +76,9 @@ public class ApplicationView extends ViewWithUiHandlers<ApplicationUiHandlers> i
 		checkIn.setVisible(true);
 		logOut.setVisible(false);
 		getUiHandlers().onLogout();
+	}
+	@UiHandler("linkHome")
+	void onHomeRoute(ClickEvent event){
+		getUiHandlers().onHomeRoute();
 	}
 }

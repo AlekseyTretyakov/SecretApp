@@ -238,8 +238,8 @@ public class ChatPresenter extends Presenter<ChatPresenter.MyView, ChatPresenter
 				// TODO Auto-generated method stub
 				alienOpenKey = result.getKey();
 				secretKey = Crypto.getSahredSecretKey(alienOpenKey, secretValue, cryptValP);
-				logger.log(Level.INFO, "okey " + openKey + "; sval " + secretValue + "; alienOpenKey " + alienOpenKey);
-				logger.log(Level.INFO, "secret key: " + secretKey);
+				//logger.log(Level.INFO, "okey " + openKey + "; sval " + secretValue + "; alienOpenKey " + alienOpenKey);
+				//logger.log(Level.INFO, "secret key: " + secretKey);
 				getView().setEnabledButton();
 				
 				Timer timer = new Timer() {

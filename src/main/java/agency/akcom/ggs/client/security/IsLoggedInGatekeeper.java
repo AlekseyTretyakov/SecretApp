@@ -26,6 +26,9 @@ abstract public class IsLoggedInGatekeeper implements Gatekeeper{
 		} else {
 			UserAccount.setUser(userName);
 			UserAccount.setloggediIn(true);
+			String channel = Cookies.getCookie("channel");
+			if (channel != null)
+				UserAccount.setChannel(Integer.parseInt(channel));
 			eventBus.fireEvent(new AuthEvent());
 		}
 		return UserAccount.loggedIn();
